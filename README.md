@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -9,69 +9,100 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial, sans-serif;
+font-family:Arial,sans-serif;
 }
 
 body{
-background:linear-gradient(180deg,#0b3d2e,#14532d,#1f7a4f);
 overflow:hidden;
-color:white;
+background:linear-gradient(180deg,#ff7eb9,#ff4d88,#14532d);
 height:100vh;
+color:white;
+}
+
+#menu{
+position:absolute;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:20px;
+background:linear-gradient(180deg,#ff7eb9,#ff4d88,#14532d);
+z-index:20;
+}
+
+h1{
+font-size:4rem;
+text-shadow:0 0 15px rgba(255,255,255,0.5);
+}
+
+.subtitle{
+font-size:1.2rem;
+opacity:0.9;
+}
+
+button{
+padding:15px 35px;
+font-size:1.1rem;
+border:none;
+border-radius:18px;
+cursor:pointer;
+background:white;
+color:#14532d;
+font-weight:bold;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.08);
 }
 
 #game{
 position:relative;
 width:100vw;
 height:100vh;
+display:none;
 overflow:hidden;
-}
-
-.background{
-position:absolute;
-inset:0;
-opacity:0.08;
-font-size:40px;
-line-height:60px;
-pointer-events:none;
 }
 
 .platform{
 position:absolute;
-background:#ffffff22;
-border:2px solid #ffffff33;
+background:#ffffff33;
+border:2px solid #ffffff44;
 border-radius:15px;
 }
 
 .player{
 position:absolute;
-width:55px;
-height:55px;
-border-radius:15px;
+width:60px;
+height:60px;
+border-radius:20px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:28px;
 font-weight:bold;
-transition:transform 0.1s;
+font-size:28px;
 }
 
 #player1{
-background:#90ee90;
-color:#14532d;
+background:#ffc0cb;
+color:#ff0066;
+box-shadow:0 0 25px #ffb6c1;
 }
 
 #player2{
 background:#0d1117;
-color:white;
+color:#00ffee;
+box-shadow:0 0 25px #00ffee;
 }
 
 .portal{
 position:absolute;
-width:90px;
-height:90px;
+width:100px;
+height:100px;
 border-radius:50%;
-background:radial-gradient(circle,#ffffff,#7fffd4,#00ff99);
-box-shadow:0 0 40px #7fffd4;
+background:radial-gradient(circle,#ffffff,#00ffcc,#00aa88);
+box-shadow:0 0 40px #00ffcc;
 animation:pulse 2s infinite;
 }
 
@@ -85,54 +116,35 @@ animation:pulse 2s infinite;
 position:absolute;
 top:20px;
 left:20px;
+background:#00000055;
+padding:18px;
+border-radius:20px;
+backdrop-filter:blur(8px);
 z-index:10;
-background:#00000055;
-padding:18px;
-border-radius:20px;
-backdrop-filter:blur(8px);
 }
 
-.ui h1{
-font-size:2rem;
-margin-bottom:10px;
-}
-
-.controls{
-margin-top:10px;
-font-size:0.9rem;
-line-height:1.6;
-}
-
-.level-box{
-position:absolute;
-top:20px;
-right:20px;
-background:#00000055;
-padding:18px;
-border-radius:20px;
-backdrop-filter:blur(8px);
+.mode{
 font-size:1.2rem;
+margin-top:10px;
 }
 
 .message{
 position:absolute;
-bottom:30px;
+bottom:20px;
 left:50%;
 transform:translateX(-50%);
-background:#00000088;
-padding:16px 25px;
+background:#00000077;
+padding:15px 30px;
 border-radius:20px;
-font-size:1.1rem;
 backdrop-filter:blur(8px);
 }
 
 .star{
 position:absolute;
-width:5px;
-height:5px;
+width:4px;
+height:4px;
 background:white;
 border-radius:50%;
-opacity:0.8;
 animation:twinkle 3s infinite;
 }
 
@@ -144,48 +156,49 @@ animation:twinkle 3s infinite;
 </style>
 </head>
 <body>
-<div id="game">
-<div class="background">
-G D G D G D G D G D G D G D G D G D G D G D G D G D
-<br><br>
-LOVE DIMENSION LOVE DIMENSION LOVE DIMENSION
-<br><br>
-G D G D G D G D G D G D G D G D G D G D G D G D
-</div>
 
-<div class="ui">
+<div id="menu">
 <h1>💚 Love Dimension 💚</h1>
-<p>Jogo cooperativo inspirado em aventuras emocionais</p>
-<div class="controls">
-<b>Player G</b>: WASD<br>
-<b>Player D</b>: Setas do teclado
-</div>
+<p class="subtitle">Jogo cooperativo inspirado em aventuras emocionais</p>
+<button onclick="startGame(1)">🎮 Jogar Solo</button>
+<button onclick="startGame(2)">👫 Jogar Cooperativo</button>
 </div>
 
-<div class="level-box">
-✨ Nível 1/24<br>
-Jardim das Primeiras Conversas
+<div id="game">
+<div class="ui">
+<h2>✨ Nível 1/24</h2>
+<p>Jardim das Primeiras Conversas</p>
+<div class="mode" id="modeText"></div>
+<br>
+<p><b>Gabriella:</b> WASD</p>
+<p><b>Diego:</b> Setas</p>
 </div>
 
 <div class="message">
-Levem os dois personagens até o portal 💚
+Leve os personagens até o portal 💚
 </div>
 
 <div class="platform" style="left:0;bottom:0;width:100%;height:100px"></div>
-<div class="platform" style="left:200px;bottom:220px;width:250px;height:30px"></div>
-<div class="platform" style="left:600px;bottom:360px;width:250px;height:30px"></div>
-<div class="platform" style="left:1000px;bottom:230px;width:200px;height:30px"></div>
+<div class="platform" style="left:180px;bottom:220px;width:240px;height:30px"></div>
+<div class="platform" style="left:550px;bottom:340px;width:240px;height:30px"></div>
+<div class="platform" style="left:920px;bottom:250px;width:240px;height:30px"></div>
 
-<div id="player1" class="player">G</div>
-<div id="player2" class="player">D</div>
+<div id="player1" class="player">Gabriella</div>
+<div id="player2" class="player">Diego</div>
 
-<div class="portal" id="portal" style="right:120px;bottom:140px"></div>
+<div id="portal" class="portal" style="right:120px;bottom:130px"></div>
 </div>
 
 <script>
+const game=document.getElementById('game');
+const menu=document.getElementById('menu');
+const modeText=document.getElementById('modeText');
+
 const p1=document.getElementById('player1');
 const p2=document.getElementById('player2');
 const portal=document.getElementById('portal');
+
+let multiplayer=false;
 
 let player1={x:100,y:500,vx:0,vy:0,onGround:false};
 let player2={x:220,y:500,vx:0,vy:0,onGround:false};
@@ -196,20 +209,34 @@ const jump=14;
 
 const keys={};
 
-document.addEventListener('keydown',(e)=>{
+document.addEventListener('keydown',e=>{
 keys[e.key]=true;
 });
 
-document.addEventListener('keyup',(e)=>{
+document.addEventListener('keyup',e=>{
 keys[e.key]=false;
 });
 
-function updatePlayer(player,element,controls){
-if(keys[controls.left]) player.vx=-speed;
-else if(keys[controls.right]) player.vx=speed;
+function startGame(players){
+menu.style.display='none';
+game.style.display='block';
+
+if(players===1){
+multiplayer=false;
+modeText.innerHTML='🎮 Modo Solo';
+}
+else{
+multiplayer=true;
+modeText.innerHTML='👫 Modo Cooperativo';
+}
+}
+
+function updatePlayer(player,element,left,right,jumpKey){
+if(keys[left]) player.vx=-speed;
+else if(keys[right]) player.vx=speed;
 else player.vx=0;
 
-if(keys[controls.jump] && player.onGround){
+if(keys[jumpKey] && player.onGround){
 player.vy=-jump;
 player.onGround=false;
 }
@@ -228,18 +255,15 @@ const platforms=document.querySelectorAll('.platform');
 platforms.forEach(platform=>{
 const rect=platform.getBoundingClientRect();
 
-const px=player.x;
-const py=player.y;
-
-if(px+55>rect.left && px<rect.right && py+55>rect.top && py+55<rect.top+25 && player.vy>=0){
-player.y=rect.top-55;
+if(player.x+60>rect.left && player.x<rect.right && player.y+60>rect.top && player.y+60<rect.top+25 && player.vy>=0){
+player.y=rect.top-60;
 player.vy=0;
 player.onGround=true;
 }
 });
 
 if(player.x<0) player.x=0;
-if(player.x>window.innerWidth-55) player.x=window.innerWidth-55;
+if(player.x>window.innerWidth-60) player.x=window.innerWidth-60;
 
 element.style.left=player.x+'px';
 element.style.top=player.y+'px';
@@ -250,18 +274,27 @@ const portalRect=portal.getBoundingClientRect();
 const p1Rect=p1.getBoundingClientRect();
 const p2Rect=p2.getBoundingClientRect();
 
-const p1Inside=(Math.abs(p1Rect.left-portalRect.left)<80);
-const p2Inside=(Math.abs(p2Rect.left-portalRect.left)<80);
+const p1Inside=Math.abs(p1Rect.left-portalRect.left)<90;
+const p2Inside=Math.abs(p2Rect.left-portalRect.left)<90;
 
+if(multiplayer){
 if(p1Inside && p2Inside){
 setTimeout(()=>{
-alert('💚 Vocês completaram o Nível 1!');
+alert('💚 Vocês completaram o nível!');
 },200);
+}
+}
+else{
+if(p1Inside){
+setTimeout(()=>{
+alert('💚 Você completou o nível!');
+},200);
+}
 }
 }
 
 function createStars(){
-for(let i=0;i<70;i++){
+for(let i=0;i<80;i++){
 const star=document.createElement('div');
 star.classList.add('star');
 star.style.left=Math.random()*window.innerWidth+'px';
@@ -272,8 +305,16 @@ document.body.appendChild(star);
 }
 
 function gameLoop(){
-updatePlayer(player1,p1,{left:'a',right:'d',jump:'w'});
-updatePlayer(player2,p2,{left:'ArrowLeft',right:'ArrowRight',jump:'ArrowUp'});
+updatePlayer(player1,p1,'a','d','w');
+
+if(multiplayer){
+updatePlayer(player2,p2,'ArrowLeft','ArrowRight','ArrowUp');
+p2.style.display='flex';
+}
+else{
+p2.style.display='none';
+}
+
 checkWin();
 requestAnimationFrame(gameLoop);
 }
