@@ -41,4 +41,4 @@
       bottom: 50px;
     }
     #player2 {
-      background: url('https://via.place
+      background: url('https://via.placE
