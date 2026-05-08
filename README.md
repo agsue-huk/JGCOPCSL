@@ -6,6 +6,7 @@
 <title>Love Dimension</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -29,7 +30,7 @@ justify-content:center;
 align-items:center;
 gap:20px;
 background:linear-gradient(180deg,#ff7eb9,#ff4d88,#14532d);
-z-index:20;
+z-index:10;
 }
 
 h1{
@@ -70,7 +71,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-weight:bold;
-font-size:18px;
+font-size:16px;
 }
 
 #player1{
@@ -110,12 +111,14 @@ background:#00000077;
 padding:15px 30px;
 border-radius:20px;
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="menu">
+
 <h1>💚 Love Dimension 💚</h1>
 
 <button onclick="startGame(1)">
@@ -125,31 +128,47 @@ border-radius:20px;
 <button onclick="startGame(2)">
 👫 Jogar Cooperativo
 </button>
+
 </div>
 
 <div id="game">
 
 <div class="ui">
-<h2>✨ Nível 1/24</h2>
-<p>Jardim das Primeiras Conversas</p>
+
+<h2 id="levelText">
+✨ Nível 1/24
+</h2>
+
+<p>
+Jardim das Primeiras Conversas
+</p>
 
 <br>
 
 <p><b>Gabriella:</b> WASD</p>
 <p><b>Diego:</b> Setas</p>
+
 </div>
 
 <div class="message">
-Leve os personagens até o portal 💚
+Chegue até o portal 💚
 </div>
 
-<div class="platform" style="left:0;bottom:0;width:100%;height:100px"></div>
+<div class="platform"
+style="left:0;bottom:0;width:100%;height:100px">
+</div>
 
-<div class="platform" style="left:180px;bottom:220px;width:240px;height:30px"></div>
+<div class="platform"
+style="left:180px;bottom:220px;width:240px;height:30px">
+</div>
 
-<div class="platform" style="left:550px;bottom:340px;width:240px;height:30px"></div>
+<div class="platform"
+style="left:550px;bottom:340px;width:240px;height:30px">
+</div>
 
-<div class="platform" style="left:920px;bottom:250px;width:240px;height:30px"></div>
+<div class="platform"
+style="left:920px;bottom:250px;width:240px;height:30px">
+</div>
 
 <div id="player1" class="player">
 Gabriella
@@ -159,7 +178,10 @@ Gabriella
 Diego
 </div>
 
-<div id="portal" class="portal" style="right:120px;bottom:130px"></div>
+<div id="portal"
+class="portal"
+style="right:120px;bottom:130px">
+</div>
 
 </div>
 
@@ -171,7 +193,13 @@ const menu=document.getElementById('menu');
 const p1=document.getElementById('player1');
 const p2=document.getElementById('player2');
 
+const portal=document.getElementById('portal');
+
+const levelText=document.getElementById('levelText');
+
 let multiplayer=false;
+
+let currentLevel=1;
 
 let player1={
 x:100,
@@ -206,6 +234,7 @@ keys[e.key]=false;
 function startGame(players){
 
 menu.style.display='none';
+
 game.style.display='block';
 
 if(players===1){
@@ -215,13 +244,44 @@ else{
 multiplayer=true;
 }
 
+initializeLevel();
+
 }
 
-function updatePlayer(player,element,left,right,jumpKey){
+function initializeLevel(){
 
-if(keys[left]) player.vx=-speed;
-else if(keys[right]) player.vx=speed;
-else player.vx=0;
+player1.x=100;
+player1.y=500;
+player1.vx=0;
+player1.vy=0;
+
+player2.x=220;
+player2.y=500;
+player2.vx=0;
+player2.vy=0;
+
+levelText.innerHTML=
+'✨ Nível '+currentLevel+'/24';
+
+}
+
+function updatePlayer(
+player,
+element,
+left,
+right,
+jumpKey
+){
+
+if(keys[left]){
+player.vx=-speed;
+}
+else if(keys[right]){
+player.vx=speed;
+}
+else{
+player.vx=0;
+}
 
 if(keys[jumpKey] && player.onGround){
 player.vy=-jump;
@@ -239,13 +299,75 @@ player.vy=0;
 player.onGround=true;
 }
 
-if(player.x<0) player.x=0;
+if(player.x<0){
+player.x=0;
+}
+
 if(player.x>window.innerWidth-70){
 player.x=window.innerWidth-70;
 }
 
 element.style.left=player.x+'px';
 element.style.top=player.y+'px';
+
+}
+
+function checkWin(){
+
+const portalRect=portal.getBoundingClientRect();
+
+const p1Rect=p1.getBoundingClientRect();
+
+const p2Rect=p2.getBoundingClientRect();
+
+const p1Inside=
+Math.abs(p1Rect.left-portalRect.left)<90;
+
+const p2Inside=
+Math.abs(p2Rect.left-portalRect.left)<90;
+
+if(multiplayer){
+
+if(p1Inside && p2Inside){
+
+nextLevel();
+
+}
+
+}
+else{
+
+if(p1Inside){
+
+nextLevel();
+
+}
+
+}
+
+}
+
+function nextLevel(){
+
+currentLevel++;
+
+if(currentLevel>24){
+
+alert(
+'💚 Parabéns! Vocês terminaram Love Dimension!'
+);
+
+location.reload();
+
+return;
+
+}
+
+alert(
+'💚 Nível '+(currentLevel-1)+' concluído!'
+);
+
+initializeLevel();
 
 }
 
@@ -273,8 +395,12 @@ p2,
 
 }
 else{
+
 p2.style.display='none';
+
 }
+
+checkWin();
 
 requestAnimationFrame(gameLoop);
 
